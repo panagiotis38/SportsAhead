@@ -11,7 +11,7 @@ import com.example.sportsahead.ui.base.BaseFragment
 import com.example.sportsahead.ui.dashboard.compose.DashboardScreen
 import com.example.sportsahead.ui.theme.SportsAheadTheme
 
-class DashboardFragment: BaseFragment() {
+class DashboardFragment : BaseFragment() {
 
 
     private lateinit var viewModel: DashboardViewModel
@@ -37,7 +37,6 @@ class DashboardFragment: BaseFragment() {
     private fun initViewModel() {
         viewModel = ViewModelProvider(this, viewModelFactory)[DashboardViewModel::class.java]
     }
-
 
 
     companion object {

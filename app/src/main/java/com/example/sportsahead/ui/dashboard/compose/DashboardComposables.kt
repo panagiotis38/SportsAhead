@@ -1,5 +1,7 @@
 package com.example.sportsahead.ui.dashboard.compose
 
+import android.widget.Space
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -7,7 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.data.model.SportId
 import com.example.sportsahead.R
 import com.example.sportsahead.ui.ErrorScreen
 import com.example.sportsahead.ui.ExpandableView
@@ -31,6 +35,8 @@ import com.example.sportsahead.ui.dashboard.DashboardViewModel
 import com.example.sportsahead.ui.model.ErrorUiModel
 import com.example.sportsahead.ui.model.dashboard.EventUiModel
 import com.example.sportsahead.ui.model.dashboard.SportUiModel
+import com.example.sportsahead.ui.theme.CharlestonGreen
+import com.example.sportsahead.ui.theme.DarkJungleGreen
 
 @Composable
 fun DashboardScreen(
@@ -41,7 +47,11 @@ fun DashboardScreen(
     Scaffold(
         topBar = { TopBar() }
     ) { padding ->
-        Box(modifier = Modifier.background(Color.DarkGray)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(DarkJungleGreen)
+        ) {
             when {
                 uiModel.isLoading -> {
                     GenericLoader()
@@ -73,24 +83,26 @@ fun ContentScreen(
     onFavouriteClicked: (String, String) -> Unit,
     onSectionClicked: (String) -> Unit
 ) {
-    LazyColumn(modifier = modifier) {
-        items(upcomingEvents) { item ->
-            SportView(
-                sportModel = item,
-                onFavouriteClicked = onFavouriteClicked,
-                onSectionClicked = onSectionClicked
-            )
+    Column {
+        Spacer(modifier = Modifier.height(20.dp))
+        LazyColumn(modifier = modifier) {
+            items(upcomingEvents) { item ->
+                SportView(
+                    sportModel = item,
+                    onFavouriteClicked = onFavouriteClicked,
+                    onSectionClicked = onSectionClicked
+                )
+            }
         }
     }
-
 }
 
 
 @Composable
-fun SportHeaderView(text: String, onItemClicked: () -> Unit) {
+fun SportHeaderView(sportModel: SportUiModel, onItemClicked: () -> Unit) {
     Box(
         modifier = Modifier
-            .background(Color.Gray)
+            .background(CharlestonGreen)
             .clickable(
                 indication = null, // Removes the ripple effect on tap
                 interactionSource = remember { MutableInteractionSource() }, // Removes the ripple effect on tap
@@ -108,27 +120,61 @@ fun SportHeaderView(text: String, onItemClicked: () -> Unit) {
             Image(
                 modifier = Modifier
                     .size(30.dp),
-                painter = painterResource(R.drawable.ic_launcher_foreground), //TODO: add diferent srawable per sport
+                painter = painterResource(getSportIconById(sportId = sportModel.id)),
                 contentDescription = null
             )
-            //TODO: handle fonts
-            //TODO: handle icons
             Text(
-                // modifier = Modifier.padding(horizontal = 5.dp),
-                text = text,
+                modifier = Modifier.padding(horizontal = 5.dp),
+                text = sportModel.name,
                 textAlign = TextAlign.Center,
                 color = Color.White,
                 fontWeight = FontWeight.Normal,
-                fontSize = 20.sp
+                fontSize = 18.sp
             )
         }
         Image(
             modifier = Modifier
                 .size(20.dp)
                 .align(Alignment.CenterEnd),
-            painter = painterResource(R.drawable.arrow_down),
+            painter = painterResource(
+                id = if (sportModel.isExpanded.value) {
+                    R.drawable.arrow_up
+                } else {
+                    R.drawable.arrow_down
+                }
+            ),
             contentDescription = null
         )
+    }
+}
+
+@DrawableRes
+private fun getSportIconById(sportId: String): Int {
+    return when (sportId) {
+        SportId.SOCCER.value -> {
+            R.drawable.ic_soccer
+        }
+        SportId.BASKETBALL.value -> {
+            R.drawable.ic_basketball
+        }
+        SportId.TENNIS.value -> {
+            R.drawable.ic_tennis
+        }
+        SportId.TABLE_TENNIS.value -> {
+            R.drawable.ic_table_tennis
+        }
+        SportId.E_SPORTS.value -> {
+            R.drawable.ic_esports
+        }
+        SportId.HANDBALL.value -> {
+            R.drawable.ic_handball
+        }
+        SportId.BEACH_VOLLEY.value -> {
+            R.drawable.ic_volleyball
+        }
+        else -> {
+            R.drawable.ic_sport_default
+        }
     }
 }
 
@@ -137,15 +183,13 @@ fun EventView(eventModel: EventUiModel, onFavouriteClicked: () -> Unit) {
 
     Column(
         modifier = Modifier
-            .background(Color.DarkGray)
+            .background(Color.Transparent)
             .padding(10.dp)
             .width(100.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         //TODO: handle fonts
-        //TODO: handle icons
-        //TODO: handle favourites
         Text(
             modifier = Modifier
                 .border(
@@ -157,7 +201,7 @@ fun EventView(eventModel: EventUiModel, onFavouriteClicked: () -> Unit) {
             textAlign = TextAlign.Center,
             color = Color.White,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp
+            fontSize = 14.sp
         )
         Image(
             modifier = Modifier
@@ -183,7 +227,7 @@ fun EventView(eventModel: EventUiModel, onFavouriteClicked: () -> Unit) {
             textAlign = TextAlign.Center,
             color = Color.White,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -192,7 +236,7 @@ fun EventView(eventModel: EventUiModel, onFavouriteClicked: () -> Unit) {
             textAlign = TextAlign.Center,
             color = Color.White,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -207,7 +251,7 @@ fun SportView(
 ) {
     Column {
         SportHeaderView(
-            text = sportModel.name,
+            sportModel = sportModel,
             onItemClicked = {
                 onSectionClicked(sportModel.id)
             }
@@ -236,7 +280,7 @@ fun SportView(
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun SportHeaderViewPreview() {
-    SportHeaderView("Basketball") {}
+    SportHeaderView(generateSportModel("1")) {}
 }
 
 @Preview(showBackground = true, widthDp = 320, backgroundColor = 0x000000)

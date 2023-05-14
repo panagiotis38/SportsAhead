@@ -13,7 +13,10 @@ class UpcomingEventsUiTransformerImpl @Inject constructor() : UpcomingEventsUiTr
     override fun transformToUiModel(dataModel: UpcomingEventsModel): UpcomingEventsUiModel {
         return UpcomingEventsUiModel(
             upcomingEvents = extractSports(dataSports = dataModel.upcomingEvents)
-        )
+        ).also {
+            // Expand first section by default
+            it.upcomingEvents.firstOrNull()?.isExpanded?.value = true
+        }
     }
 
     private fun extractSports(dataSports: List<SportModel>): List<SportUiModel> {

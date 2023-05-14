@@ -2,6 +2,7 @@ package com.example.sportsahead.ui
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -19,13 +21,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sportsahead.R
 import com.example.sportsahead.ui.model.ErrorUiModel
+import com.example.sportsahead.ui.theme.Zomp
 
 @Composable
 fun TopBar() {
     TopAppBar(
-        title = { Text(text = stringResource(R.string.app_name), fontSize = 18.sp) },
-        backgroundColor = Color.DarkGray,
-        //TODO: Add primary colors etc: backgroundColor = colorResource(id = R.color.colorPrimary),
+        title = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    text = stringResource(R.string.app_name),
+                    fontSize = 26.sp
+                )
+                Image(
+                    modifier = Modifier
+                        .size(45.dp)
+                        .padding(horizontal = 10.dp),
+                    painter = painterResource(R.drawable.ic_runner),
+                    contentDescription = null
+                )
+            }
+        },
+        backgroundColor = Zomp,
         contentColor = Color.White
     )
 }
