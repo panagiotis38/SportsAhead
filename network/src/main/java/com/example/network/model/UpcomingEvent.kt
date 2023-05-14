@@ -13,5 +13,5 @@ data class UpcomingEvent(
     @SerializedName("sh")
     val description: String?,
     @SerializedName("tt")
-    val timeUntilStart: Int?
+    val timeUntilStart: Long?
 )

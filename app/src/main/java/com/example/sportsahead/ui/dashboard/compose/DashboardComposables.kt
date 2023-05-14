@@ -195,7 +195,7 @@ fun EventView(eventModel: EventUiModel, onFavouriteClicked: () -> Unit) {
                     shape = RoundedCornerShape(20)
                 )
                 .padding(2.dp),
-            text = "10:06:34",
+            text = eventModel.formattedTimeUntilStart.value,
             textAlign = TextAlign.Center,
             color = Color.White,
             fontWeight = FontWeight.Normal,

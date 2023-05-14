@@ -3,17 +3,23 @@ package com.example.sportsahead.ui.dashboard
 import androidx.lifecycle.viewModelScope
 import com.example.data.base.DataResponse
 import com.example.data.datasource.UpcomingEventsDatasource
+import com.example.data.mapper.UpcomingEventsDataMapper.Companion.ONE_SECOND_IN_MILLIS
+import com.example.data.model.UpcomingEventsModel
 import com.example.sportsahead.R
 import com.example.sportsahead.ui.base.BaseViewModel
 import com.example.sportsahead.ui.dashboard.transformer.UpcomingEventsUiTransformer
 import com.example.sportsahead.ui.model.ErrorUiModel
 import com.example.sportsahead.ui.model.dashboard.UpcomingEventsUiModel
+import com.example.sportsahead.utils.EventCountdownTimer
 import com.example.sportsahead.utils.ResourcesRepo
+import com.example.sportsahead.utils.formatDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class DashboardViewModel @Inject constructor(
@@ -21,6 +27,8 @@ class DashboardViewModel @Inject constructor(
     private val datasource: UpcomingEventsDatasource,
     private val uiTransformer: UpcomingEventsUiTransformer
 ) : BaseViewModel() {
+
+    private lateinit var simpleDateFormat: SimpleDateFormat
 
     private val mutableUiFlow = MutableStateFlow(DashboardUiState())
     val uiFlow = mutableUiFlow.asStateFlow()
@@ -32,6 +40,7 @@ class DashboardViewModel @Inject constructor(
                     emitSuccessEvent(
                         uiModel = uiTransformer.transformToUiModel(dataModel = it)
                     )
+                    startEventTimer(it)
                 } ?: run {
                     emitErrorEvent(
                         title = resourcesRepo.getString(R.string.generic_error_title),
@@ -82,6 +91,51 @@ class DashboardViewModel @Inject constructor(
                         )
                     }
                 }
+            )
+        }
+    }
+
+    private fun startEventTimer(dataModel: UpcomingEventsModel) = viewModelScope.launch {
+        initSimpleDateFormat()
+
+        EventCountdownTimer().startTimer(
+            timeInSeconds = (dataModel.latestEventStartTimeInMillis / ONE_SECOND_IN_MILLIS),
+            intervalInMillis = ONE_SECOND_IN_MILLIS,
+            onTick = {
+                emitTimerTickEvent()
+            },
+            onFinish = {
+                // do nothing
+            }
+        )
+
+    }
+
+    private fun initSimpleDateFormat() {
+        simpleDateFormat = SimpleDateFormat(
+            EVENTS_START_TIME_PATTERN,
+            Locale.getDefault()
+        )
+    }
+
+    private fun emitTimerTickEvent() {
+        val currentContent = mutableUiFlow.value.content
+        val newContent = currentContent.apply {
+            upcomingEvents.forEach { sport ->
+                sport.events.forEach { event ->
+                    event.millisUntilStart?.let {
+                        event.millisUntilStart = (it - ONE_SECOND_IN_MILLIS)
+                    }
+                    event.formattedTimeUntilStart.value =
+                        event.millisUntilStart?.formatDate(simpleDateFormat).orEmpty()
+                }
+            }
+        }
+        mutableUiFlow.update {
+            it.copy(
+                isLoading = false,
+                error = ErrorUiModel(),
+                content = newContent
             )
         }
     }
@@ -139,6 +193,10 @@ class DashboardViewModel @Inject constructor(
                 )
             }
         }
+
+    companion object {
+        private const val EVENTS_START_TIME_PATTERN = "HH:mm:ss"
+    }
 
 }
 

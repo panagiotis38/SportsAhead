@@ -21,11 +21,15 @@ class UpcomingEventsDataMapper(
             upcomingEvents = extractSports(
                 networkSports = response,
                 favouritesMap = userFavourites.favouritesMap
-            )
+            ),
+            latestEventStartTimeInMillis = getLatestEventTime(sports = response)
         )
     }
 
-    private fun extractSports(networkSports: List<UpcomingSport?>, favouritesMap: Map<String, List<String>>): List<SportModel> {
+    private fun extractSports(
+        networkSports: List<UpcomingSport?>,
+        favouritesMap: Map<String, List<String>>
+    ): List<SportModel> {
         return networkSports.map {
             SportModel(
                 id = it?.id.orEmpty(),
@@ -38,7 +42,10 @@ class UpcomingEventsDataMapper(
         }
     }
 
-    private fun extractEvents(networkEvents: List<UpcomingEvent?>?, userFavourites: List<String>?): List<EventModel> {
+    private fun extractEvents(
+        networkEvents: List<UpcomingEvent?>?,
+        userFavourites: List<String>?
+    ): List<EventModel> {
         return networkEvents?.map {
             val contestantNames = it?.name?.split("-")
             EventModel(
@@ -51,11 +58,26 @@ class UpcomingEventsDataMapper(
         }.orEmpty()
     }
 
-
-
+    private fun getLatestEventTime(sports: List<UpcomingSport?>): Long {
+        val latestEventsList = mutableListOf<UpcomingEvent>()
+        sports.forEach { sport ->
+            sport?.upcomingEvents?.maxBy { it?.timeUntilStart ?: 0L }?.let { latestEvent ->
+                latestEventsList.add(latestEvent)
+            }
+        }
+        return latestEventsList.maxOf { it.timeUntilStart ?: 0L }
+    }
 
     private suspend fun getUserFavourites(): FavouriteModel {
-        return dataStore.readObject(DataStoreConstants.KEY_USER_FAVORITES, FavouriteModel::class.java)
+        return dataStore.readObject(
+            DataStoreConstants.KEY_USER_FAVORITES,
+            FavouriteModel::class.java
+        )
             ?: FavouriteModel()
     }
+
+    companion object {
+        const val ONE_SECOND_IN_MILLIS = 1000L
+    }
+
 }
