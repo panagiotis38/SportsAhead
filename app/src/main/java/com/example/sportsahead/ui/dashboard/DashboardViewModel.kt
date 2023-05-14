@@ -108,14 +108,15 @@ class DashboardViewModel @Inject constructor(
                 // do nothing
             }
         )
-
     }
 
     private fun initSimpleDateFormat() {
         simpleDateFormat = SimpleDateFormat(
             EVENTS_START_TIME_PATTERN,
             Locale.getDefault()
-        )
+        ).also {
+            it.timeZone = TimeZone.getTimeZone(TIMEZONE_UTC)
+        }
     }
 
     private fun emitTimerTickEvent() {
@@ -123,8 +124,12 @@ class DashboardViewModel @Inject constructor(
         val newContent = currentContent.apply {
             upcomingEvents.forEach { sport ->
                 sport.events.forEach { event ->
-                    event.millisUntilStart?.let {
-                        event.millisUntilStart = (it - ONE_SECOND_IN_MILLIS)
+                    event.millisUntilStart?.apply {
+                        event.millisUntilStart = (this - ONE_SECOND_IN_MILLIS)
+                    }?.also {
+                        if (it <= 0) {
+                            event.millisUntilStart = 0
+                        }
                     }
                     event.formattedTimeUntilStart.value =
                         event.millisUntilStart?.formatDate(simpleDateFormat).orEmpty()
@@ -196,6 +201,7 @@ class DashboardViewModel @Inject constructor(
 
     companion object {
         private const val EVENTS_START_TIME_PATTERN = "HH:mm:ss"
+        private const val TIMEZONE_UTC = "UTC"
     }
 
 }

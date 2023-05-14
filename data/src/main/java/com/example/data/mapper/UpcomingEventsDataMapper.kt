@@ -52,7 +52,7 @@ class UpcomingEventsDataMapper(
                 id = it?.id.orEmpty(),
                 firstContestant = contestantNames?.firstOrNull().orEmpty(),
                 secondContestant = contestantNames?.getOrNull(1).orEmpty(),
-                millisUntilStart = it?.timeUntilStart?.toLong(),
+                millisUntilStart = it?.timeUntilStart,
                 isFavourite = userFavourites?.contains(it?.id.orEmpty()) ?: false
             )
         }.orEmpty()
