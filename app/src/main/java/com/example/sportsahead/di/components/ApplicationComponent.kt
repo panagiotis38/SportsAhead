@@ -2,10 +2,7 @@ package com.example.sportsahead.di.components
 
 import android.app.Application
 import com.example.sportsahead.di.ViewModelFactory
-import com.example.sportsahead.di.modules.ActivityModule
-import com.example.sportsahead.di.modules.ApplicationModule
-import com.example.sportsahead.di.modules.TransformerModule
-import com.example.sportsahead.di.modules.ViewModelModule
+import com.example.sportsahead.di.modules.*
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -15,7 +12,8 @@ import javax.inject.Singleton
     modules = [
         ApplicationModule::class,
         ViewModelModule::class,
-        TransformerModule::class
+        TransformerModule::class,
+        UseCaseModule::class
     ]
 )
 interface ApplicationComponent {

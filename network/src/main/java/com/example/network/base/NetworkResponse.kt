@@ -11,7 +11,9 @@ sealed class NetworkResponse<T> {
 
 sealed class NetworkError {
 
-    //TODO: Replace with servers network error model
+    /**
+     *  Generic model since the server's error model is unknown at the moment
+     * **/
     data class ServerError(
         @SerializedName("code")
         var code: String?,

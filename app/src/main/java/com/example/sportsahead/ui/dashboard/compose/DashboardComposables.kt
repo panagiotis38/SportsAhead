@@ -1,6 +1,5 @@
 package com.example.sportsahead.ui.dashboard.compose
 
-import android.widget.Space
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.SportId
 import com.example.sportsahead.R
-import com.example.sportsahead.ui.ErrorScreen
+import com.example.sportsahead.ui.ErrorView
 import com.example.sportsahead.ui.ExpandableView
 import com.example.sportsahead.ui.GenericLoader
 import com.example.sportsahead.ui.TopBar
@@ -57,7 +56,7 @@ fun DashboardScreen(
                     GenericLoader()
                 }
                 uiModel.error.show -> {
-                    ErrorScreen(errorModel = uiModel.error)
+                    ErrorView(errorModel = uiModel.error)
                 }
                 uiModel.content.upcomingEvents.isNotEmpty() -> {
                     ContentScreen(
@@ -189,7 +188,6 @@ fun EventView(eventModel: EventUiModel, onFavouriteClicked: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        //TODO: handle fonts
         Text(
             modifier = Modifier
                 .border(
@@ -298,18 +296,6 @@ fun SportViewPreview() {
     SportView(
         sportModel = generateSportModel("1"),
         onSectionClicked = {}
-    )
-}
-
-@Preview
-@Composable
-fun ErrorScreenPreview() {
-    ErrorScreen(
-        errorModel = ErrorUiModel(
-            show = true,
-            title = "Something has gone wrong!",
-            message = "Please try again later"
-        )
     )
 }
 

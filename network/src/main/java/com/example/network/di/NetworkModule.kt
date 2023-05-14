@@ -1,5 +1,6 @@
 package com.example.network.di
 
+import com.example.network.BuildConfig
 import com.example.network.api.ApiConstants
 import com.example.network.api.ApiService
 import com.example.network.interceptors.CurlLogger
@@ -20,7 +21,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providePremierLeagueMatchesRepo(): UpcomingEventsNetworkRepo {
+    fun provideUpcomingEventsRepo(): UpcomingEventsNetworkRepo {
         return UpcomingEventsNetworkRepo(getApiInstance())
     }
 
@@ -56,12 +57,20 @@ class NetworkModule {
 
         private fun provideCurlLogger() = CurlLoggerInterceptor(
             loggable = CurlLogger(
-                level = Level.INFO // TODO: if (BuildConfig.RELEASE) Level.OFF else Level.INFO
+                level = if (BuildConfig.DEBUG) {
+                    Level.INFO
+                } else {
+                    Level.OFF
+                }
             )
         )
 
         private fun provideHttpLogger() = HttpLoggingInterceptor().also {
-            it.level = HttpLoggingInterceptor.Level.BODY //TODO: disable on release
+            it.level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
         }
 
         private fun provideGsonConverterFactory() = GsonConverterFactory.create()

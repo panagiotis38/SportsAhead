@@ -14,6 +14,6 @@ class HomeViewModel @Inject constructor(
 
     fun testDataSource() = viewModelScope.launch {
         val data = datasource.fetchUpcomingEvents()
-        Logger.getGlobal().log(Level.INFO,"TestData: data = $data")
+        Logger.getGlobal().log(Level.INFO, "TestData: data = $data")
     }
 }

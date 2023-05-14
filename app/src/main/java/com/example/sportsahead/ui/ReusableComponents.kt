@@ -68,7 +68,7 @@ fun GenericLoader() {
 }
 
 @Composable
-fun ErrorScreen(
+fun ErrorView(
     errorModel: ErrorUiModel
 ) {
     Box(
@@ -80,7 +80,7 @@ fun ErrorScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(50.dp),
+                .padding(20.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
             Column(
@@ -99,7 +99,7 @@ fun ErrorScreen(
                     textAlign = TextAlign.Center,
                     color = Color.White,
                     fontWeight = FontWeight.Normal,
-                    fontSize = 20.sp
+                    fontSize = 18.sp
                 )
                 Text(
                     modifier = Modifier
@@ -118,7 +118,7 @@ fun ErrorScreen(
                     textAlign = TextAlign.Center,
                     color = Color.Black,
                     fontWeight = FontWeight.Normal,
-                    fontSize = 20.sp
+                    fontSize = 18.sp
                 )
                 Spacer(modifier = Modifier.height(35.dp))
             }
@@ -131,11 +131,12 @@ fun ErrorScreen(
                 }
             ) {
                 Text(
-                    text = "Try again",
+                    modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp),
+                    text = errorModel.buttonText,
                     textAlign = TextAlign.Center,
                     color = Color.White,
                     fontWeight = FontWeight.Normal,
-                    fontSize = 20.sp
+                    fontSize = 16.sp
                 )
             }
         }
@@ -181,4 +182,17 @@ fun ExpandableView(
 @Composable
 fun TopBarPreview() {
     TopBar()
+}
+
+@Preview
+@Composable
+fun ErrorViewPreview() {
+    ErrorView(
+        errorModel = ErrorUiModel(
+            show = true,
+            title = "Something has gone wrong!",
+            message = "Please try again later",
+            buttonText = "Retry"
+        )
+    )
 }

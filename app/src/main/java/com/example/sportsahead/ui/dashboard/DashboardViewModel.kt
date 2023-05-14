@@ -3,10 +3,12 @@ package com.example.sportsahead.ui.dashboard
 import androidx.lifecycle.viewModelScope
 import com.example.data.base.DataResponse
 import com.example.data.datasource.UpcomingEventsDatasource
+import com.example.sportsahead.R
 import com.example.sportsahead.ui.base.BaseViewModel
 import com.example.sportsahead.ui.dashboard.transformer.UpcomingEventsUiTransformer
 import com.example.sportsahead.ui.model.ErrorUiModel
 import com.example.sportsahead.ui.model.dashboard.UpcomingEventsUiModel
+import com.example.sportsahead.utils.ResourcesRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DashboardViewModel @Inject constructor(
+    private val resourcesRepo: ResourcesRepo,
     private val datasource: UpcomingEventsDatasource,
     private val uiTransformer: UpcomingEventsUiTransformer
 ) : BaseViewModel() {
@@ -31,16 +34,15 @@ class DashboardViewModel @Inject constructor(
                     )
                 } ?: run {
                     emitErrorEvent(
-                        title = "Empty data title",
-                        message = "Empty data message"
+                        title = resourcesRepo.getString(R.string.generic_error_title),
+                        message = resourcesRepo.getString(R.string.generic_error_message)
                     )
                 }
             }
             is DataResponse.Error -> {
-                //TODO: handle error case here
                 emitErrorEvent(
-                    title = "Generic error title",
-                    message = "Generic error message"
+                    title = resourcesRepo.getString(R.string.generic_error_title),
+                    message = resourcesRepo.getString(R.string.generic_error_message)
                 )
             }
         }
@@ -102,6 +104,7 @@ class DashboardViewModel @Inject constructor(
                     show = true,
                     title = title,
                     message = message,
+                    buttonText = resourcesRepo.getString(R.string.error_button_text),
                     onTryAgain = {
                         emitLoadingEvent()
                         fetchUpcomingEvents()
