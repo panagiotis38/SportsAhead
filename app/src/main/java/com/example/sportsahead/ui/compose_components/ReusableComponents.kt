@@ -1,4 +1,4 @@
-package com.example.sportsahead.ui
+package com.example.sportsahead.ui.compose_components
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween

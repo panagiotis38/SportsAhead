@@ -16,7 +16,7 @@ internal class UpcomingEventsUiTransformerImplTest {
 
         val uiModel = transformer.transformToUiModel(dataModel = dataModel)
 
-        with (uiModel.upcomingEvents) {
+        with(uiModel.upcomingEvents) {
             Assert.assertTrue(size == 2)
             Assert.assertTrue(first().events.size == 3)
             Assert.assertTrue(first().id == "1000")

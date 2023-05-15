@@ -1,3 +1,3 @@
 package com.example.network.base
 
-class TestBaseRepo: BaseNetworkRepo()
+class TestBaseRepo : BaseNetworkRepo()

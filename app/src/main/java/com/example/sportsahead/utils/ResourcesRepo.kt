@@ -14,9 +14,9 @@ interface ResourcesRepo {
 class ResourcesRepoImpl @Inject constructor(
     private val application: Application
 ) : ResourcesRepo {
+
     override fun getString(id: Int): String {
         return application.getString(id)
     }
-
 
 }

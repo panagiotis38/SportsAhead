@@ -8,7 +8,8 @@ import org.junit.Test
 
 internal class BaseErrorTransformerImplTest {
 
-    private val baseErrorTransformer = BaseErrorTransformerImpl<BaseNetworkListResponse<*>, BaseDataResponse>()
+    private val baseErrorTransformer =
+        BaseErrorTransformerImpl<BaseNetworkListResponse<*>, BaseDataResponse>()
 
     @Test
     fun `when error is server error with non null code then return appropriate data response`() {

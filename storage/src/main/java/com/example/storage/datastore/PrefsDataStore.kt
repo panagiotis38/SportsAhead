@@ -11,4 +11,5 @@ interface PrefsDataStore {
 
     suspend fun clear(key: String)
     suspend fun clearAll()
+
 }

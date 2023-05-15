@@ -4,8 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import com.example.data.base.DataResponse
 import com.example.data.datasource.UpcomingEventsDatasource
 import com.example.data.model.UpcomingEventsModel
-import com.example.soccerinfo.ui.base.BaseViewModelTest
 import com.example.sportsahead.R
+import com.example.sportsahead.ui.base.BaseViewModelTest
 import com.example.sportsahead.ui.dashboard.transformer.UpcomingEventsUiTransformer
 import com.example.sportsahead.ui.model.dashboard.EventUiModel
 import com.example.sportsahead.ui.model.dashboard.SportUiModel

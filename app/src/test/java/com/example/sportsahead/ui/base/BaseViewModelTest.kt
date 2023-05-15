@@ -1,4 +1,4 @@
-package com.example.soccerinfo.ui.base
+package com.example.sportsahead.ui.base
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.sportsahead.utils.CoroutineTestRule

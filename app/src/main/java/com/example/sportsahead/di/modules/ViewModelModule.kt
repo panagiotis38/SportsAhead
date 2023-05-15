@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sportsahead.di.ViewModelFactory
 import com.example.sportsahead.di.annotations.ViewModelKey
 import com.example.sportsahead.ui.dashboard.DashboardViewModel
-import com.example.sportsahead.ui.home.HomeViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -15,11 +14,6 @@ interface ViewModelModule {
 
     @Binds
     fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(HomeViewModel::class)
-    fun bindHomeViewModel(viewModel: HomeViewModel): ViewModel
 
     @Binds
     @IntoMap

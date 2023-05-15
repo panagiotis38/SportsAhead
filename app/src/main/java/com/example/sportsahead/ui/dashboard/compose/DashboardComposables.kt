@@ -26,12 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.SportId
 import com.example.sportsahead.R
-import com.example.sportsahead.ui.ErrorView
-import com.example.sportsahead.ui.ExpandableView
-import com.example.sportsahead.ui.GenericLoader
-import com.example.sportsahead.ui.TopBar
+import com.example.sportsahead.ui.compose_components.ErrorView
+import com.example.sportsahead.ui.compose_components.ExpandableView
+import com.example.sportsahead.ui.compose_components.GenericLoader
+import com.example.sportsahead.ui.compose_components.TopBar
 import com.example.sportsahead.ui.dashboard.DashboardViewModel
-import com.example.sportsahead.ui.model.ErrorUiModel
 import com.example.sportsahead.ui.model.dashboard.EventUiModel
 import com.example.sportsahead.ui.model.dashboard.SportUiModel
 import com.example.sportsahead.ui.theme.CharlestonGreen

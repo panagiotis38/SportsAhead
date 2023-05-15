@@ -70,7 +70,8 @@ internal class BaseDataSourceTest {
 
     @Test
     fun `when network response is erroneous then invoke base error transformer`() = runTest {
-        val networkResponse = NetworkResponse.Error<BaseNetworkListResponse<*>>(NetworkError.ServerError("400", ""))
+        val networkResponse =
+            NetworkResponse.Error<BaseNetworkListResponse<*>>(NetworkError.ServerError("400", ""))
         Mockito.`when`(errorTransformer.transformApiError(any())).thenReturn(
             DataResponse.Error(
                 code = DataErrorCodes.GENERIC_ERROR
