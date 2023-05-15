@@ -40,6 +40,20 @@ internal class UpcomingEventsUiTransformerImplTest {
         Assert.assertFalse(uiModel.upcomingEvents[1].isExpanded.value)
     }
 
+    @Test
+    fun `given null millis when formatDate is called then return empty date`() {
+        val formattedDate = transformer.formatDate(millis = null)
+
+        Assert.assertTrue(formattedDate.isEmpty())
+    }
+
+    @Test
+    fun `when formatDate is called then return formatted date`() {
+        val formattedDate = transformer.formatDate(millis = 123456789)
+
+        Assert.assertTrue(formattedDate == "10:17:36")
+    }
+
     private fun dataModel() = UpcomingEventsModel(
         upcomingEvents = listOf(
             sportModel(1000L),

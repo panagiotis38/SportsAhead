@@ -12,14 +12,11 @@ import com.example.sportsahead.ui.model.ErrorUiModel
 import com.example.sportsahead.ui.model.dashboard.UpcomingEventsUiModel
 import com.example.sportsahead.utils.EventCountdownTimer
 import com.example.sportsahead.utils.ResourcesRepo
-import com.example.sportsahead.utils.formatDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class DashboardViewModel @Inject constructor(
@@ -27,8 +24,6 @@ class DashboardViewModel @Inject constructor(
     private val datasource: UpcomingEventsDatasource,
     private val uiTransformer: UpcomingEventsUiTransformer
 ) : BaseViewModel() {
-
-    private lateinit var simpleDateFormat: SimpleDateFormat
 
     private val mutableUiFlow = MutableStateFlow(DashboardUiState())
     val uiFlow = mutableUiFlow.asStateFlow()
@@ -96,8 +91,6 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun startEventTimer(dataModel: UpcomingEventsModel) = viewModelScope.launch {
-        initSimpleDateFormat()
-
         EventCountdownTimer().startTimer(
             timeInSeconds = (dataModel.latestEventStartTimeInMillis / ONE_SECOND_IN_MILLIS),
             intervalInMillis = ONE_SECOND_IN_MILLIS,
@@ -108,15 +101,6 @@ class DashboardViewModel @Inject constructor(
                 // do nothing
             }
         )
-    }
-
-    private fun initSimpleDateFormat() {
-        simpleDateFormat = SimpleDateFormat(
-            EVENTS_START_TIME_PATTERN,
-            Locale.getDefault()
-        ).also {
-            it.timeZone = TimeZone.getTimeZone(TIMEZONE_UTC)
-        }
     }
 
     private fun emitTimerTickEvent() {
@@ -132,7 +116,7 @@ class DashboardViewModel @Inject constructor(
                         }
                     }
                     event.formattedTimeUntilStart.value =
-                        event.millisUntilStart?.formatDate(simpleDateFormat).orEmpty()
+                        uiTransformer.formatDate(event.millisUntilStart)
                 }
             }
         }
@@ -198,11 +182,6 @@ class DashboardViewModel @Inject constructor(
                 )
             }
         }
-
-    companion object {
-        private const val EVENTS_START_TIME_PATTERN = "HH:mm:ss"
-        private const val TIMEZONE_UTC = "UTC"
-    }
 
 }
 

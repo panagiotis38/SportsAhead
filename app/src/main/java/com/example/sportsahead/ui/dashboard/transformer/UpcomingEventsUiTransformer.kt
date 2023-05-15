@@ -7,4 +7,6 @@ interface UpcomingEventsUiTransformer {
 
     fun transformToUiModel(dataModel: UpcomingEventsModel): UpcomingEventsUiModel
 
+    fun formatDate(millis: Long?): String
+
 }
