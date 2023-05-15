@@ -61,11 +61,11 @@ class UpcomingEventsDataMapper(
     private fun getLatestEventTime(sports: List<UpcomingSport?>): Long {
         val latestEventsList = mutableListOf<UpcomingEvent>()
         sports.forEach { sport ->
-            sport?.upcomingEvents?.maxBy { it?.timeUntilStart ?: 0L }?.let { latestEvent ->
+            sport?.upcomingEvents?.maxByOrNull { it?.timeUntilStart ?: 0L }?.let { latestEvent ->
                 latestEventsList.add(latestEvent)
             }
         }
-        return latestEventsList.maxOf { it.timeUntilStart ?: 0L }
+        return latestEventsList.maxOfOrNull { it.timeUntilStart ?: 0L } ?: 0L
     }
 
     private suspend fun getUserFavourites(): FavouriteModel {
